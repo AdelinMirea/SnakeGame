@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="Player.js"></script>
+    <script src="Food.js"></script>
+</head>
+<body>
+    
+</body>
+
+<style>
+.canvas{
+    background-color: bisque;
+    height: 800px;
+    width: 800px;
+}
+
+</style>
+
+<script>
+    let canvas;
+    let head;
+    let food;
+
+    function createCanvas(){
+        canvas = document.createElement('div');
+        canvas.className = "canvas";
+        document.body.appendChild(canvas);
+    }
+
+    function createPlayer(){
+        head = new Player();
+        canvas.appendChild(head.Elem);
+        move();
+    }
+
+    function move(){
+        
+        let where = 'none'; //right
+        let interval = setInterval(function(){
+            document.addEventListener('keydown', function(e){
+                if(e.keyCode == 39){
+                    where = 'right';
+                }else if(e.keyCode == 37){
+                    where = 'left';
+                }else if(e.keyCode == 38){
+                    where = 'up';
+                }else if(e.keyCode == 40){
+                    where = 'down';
+                }
+            }); 
+            head.move(where);
+        }, 500, head);
+    }
+
+    function createFood(){
+        let x, y;
+        x = Math.floor(40 * (Math.random() * (canvas.offsetHeight - 40)/40));
+
+        y = Math.floor(40 * (Math.random() * (canvas.offsetWidth - 40)/40));
+     
+        food  = new Food(x, y);
+        document.body.appendChild(food.Elem);
+    }
+
+    function main(){
+        createCanvas();
+        createPlayer();
+        createFood();
+    }
+
+    main();
+</script>
+
+</html>
