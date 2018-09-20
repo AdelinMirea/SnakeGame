@@ -15,8 +15,8 @@
 <style>
 .canvas{
     background-color: bisque;
-    height: 800px;
-    width: 800px;
+    height: 805px;
+    width: 805px;
 }
 
 </style>
@@ -24,7 +24,8 @@
 <script>
     let canvas;
     let head;
-    let food;
+    let food ;
+    let score = 0;
 
     function createCanvas(){
         canvas = document.createElement('div');
@@ -39,7 +40,7 @@
     }
 
     function move(){
-        
+        let gameOver = false; 
         let where = 'none'; //right
         let interval = setInterval(function(){
             document.addEventListener('keydown', function(e){
@@ -54,15 +55,33 @@
                 }
             }); 
             head.move(where);
+
+            if(head.hitWall(canvas)){
+                gameOver = true;
+            }
+            
+            if(head.ate(food)){
+                score ++;
+                head.getBigger();
+                createFood();
+            }
+
+            if(gameOver == true){
+                clearInterval(interval);
+                head.hide();
+                alert('hit');
+            }
         }, 500, head);
     }
 
     function createFood(){
         let x, y;
-        x = Math.floor(40 * (Math.random() * (canvas.offsetHeight - 40)/40));
+        x = Math.floor(40 * (Math.random() * (canvas.offsetHeight - 45)/40));
 
-        y = Math.floor(40 * (Math.random() * (canvas.offsetWidth - 40)/40));
-     
+        y = Math.floor(40 * (Math.random() * (canvas.offsetWidth - 45)/40));
+        if(typeof(food) == 'object'){
+            food.setDisplay('none'); 
+        }   
         food  = new Food(x, y);
         document.body.appendChild(food.Elem);
     }

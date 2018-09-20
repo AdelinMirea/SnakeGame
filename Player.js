@@ -47,4 +47,32 @@ class Player{
     get offsetWidth(){
         return this.head.offsetWidth;
     }
+
+    hitWall(canvas){
+        if(this.head.offsetLeft < canvas.offsetLeft){
+            return true;
+        }else if(this.head.offsetLeft + this.head.offsetWidth > canvas.offsetWidth + 5){
+            return true;
+        }else if(this.head.offsetTop < canvas.offsetTop){
+            return true;
+        }else if(this.head.offsetTop + this.head.offsetHeight > canvas.offsetHeight + 5){
+            return true;
+        }
+        return false;
+    }
+
+    hide(){
+        this.head.style.display = 'none';
+    }
+
+    ate(food){
+        if(this.head.offsetLeft < food.offsetLeft + food.offsetWidth && this.head.offsetLeft + this.head.offsetWidth > food.offsetLeft + this.head.offsetWidth/2 && this.head.offsetTop > food.offsetTop + this.head.offsetHeight/2 && this.head.offsetTop + this.head.offsetHeight < food.offsetTop + food.offsetHeight ){
+            return true;
+        }
+        return false;
+    }
+
+    getBigger(){
+        //TODO
+    }
 }

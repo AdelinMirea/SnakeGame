@@ -13,4 +13,25 @@ class Food{
     get Elem(){
         return this.food;  
     }
+
+    
+    get offsetHeight(){
+        return this.food.offsetHeight;
+    }
+
+    get offsetLeft(){
+        return this.food.offsetLeft;
+    }
+
+    get offsetTop(){
+        return this.food.offsetTop;
+    }
+
+    get offsetWidth(){
+        return this.food.offsetWidth;
+    }
+
+    setDisplay(item){
+        this.food.style.display = item;
+    }
 }
