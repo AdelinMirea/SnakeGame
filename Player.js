@@ -1,33 +1,73 @@
 class Player{
     constructor(){
-        this.positions = []
-        this.head = document.createElement('div');
-        this.head.style.width = '40px';
-        this.head.style.height = '40px';
-        this.head.style.backgroundColor = 'black';
-        this.head.style.left = '130px';
-        this.head.style.top = '130px';
-        this.head.style.position = 'absolute';
+        this.head = [];
+        this.head[0] = document.createElement('div');
 
+        this.head[0].style.width = '40px';
+        this.head[0].style.height = '40px';
+        this.head[0].style.backgroundColor = 'grey';
+        this.head[0].style.left = '130px';
+        this.head[0].style.top = '130px';
+        this.head[0].style.position = 'absolute';
+    
     }
+
+
+    getPart(left, top, where){
+        let part = document.createElement('div');
+        part.style.width = '40px';
+        part.style.height = '40px';
+        part.style.backgroundColor = 'black';
+        if(where == 'up'){
+            part.style.left = left + 'px';
+            part.style.top = top + 40 + 'px';
+        }else if(where == 'down'){
+            part.style.left = left + 'px';
+            part.style.top = top - 40 + 'px';
+        }else if(where == 'left'){
+            part.style.left = left - 40 + 'px';
+            part.style.top = top + 'px';
+        }else if(where == 'right'){
+            part.style.left = left + 40 + 'px';
+            part.style.top = top + 'px';
+        }
+
+        part.style.position = 'absolute';
+        return part;
+    }
+
 
     get Elem(){
         return this.head;
     }
 
+    get length(){
+        return this.head.length;
+    }
+
     move(where){
-        //console.log(where);
+        for(let i=this.head.length-1; i>=1; i--){
+            //console.log(this.head[i].offsetLeft);
+            /*
+            this.head[i].style.left = this.positions[i-1][0] + 'px';
+            this.head[i].style.top = this.positions[i-1][1] + 'px';
+            this.positions[i] = this.positions[i-1];
+            */
+           this.head[i].style.left = this.head[i-1].style.left;
+           this.head[i].style.top   = this.head[i-1].style.top;
+
+        }
         switch(where){
-            case 'up': this.head.style.top = this.head.offsetTop - this.head.offsetHeight + 'px';
+            case 'up': this.head[0].style.top = this.head[0].offsetTop - this.head[0].offsetHeight + 'px';
                     break;
 
-            case 'down': this.head.style.top = this.head.offsetTop + this.head.offsetHeight + 'px';
+            case 'down': this.head[0].style.top = this.head[0].offsetTop + this.head[0].offsetHeight + 'px';
                     break;
 
-            case 'left': this.head.style.left = this.head.offsetLeft - this.head.offsetWidth + 'px';
+            case 'left': this.head[0].style.left = this.head[0].offsetLeft - this.head[0].offsetWidth + 'px';
                     break;
 
-            case 'right': this.head.style.left = this.head.offsetLeft + this.head.offsetWidth + 'px';
+            case 'right': this.head[0].style.left = this.head[0].offsetLeft + this.head[0].offsetWidth + 'px'; 
                     break;
         }
     }
@@ -49,30 +89,44 @@ class Player{
     }
 
     hitWall(canvas){
-        if(this.head.offsetLeft < canvas.offsetLeft){
+        if(this.head[0].offsetLeft < canvas.offsetLeft){
             return true;
-        }else if(this.head.offsetLeft + this.head.offsetWidth > canvas.offsetWidth + 5){
+        }else if(this.head[0].offsetLeft + this.head[0].offsetWidth > canvas.offsetWidth + 5){
             return true;
-        }else if(this.head.offsetTop < canvas.offsetTop){
+        }else if(this.head[0].offsetTop < canvas.offsetTop){
             return true;
-        }else if(this.head.offsetTop + this.head.offsetHeight > canvas.offsetHeight + 5){
+        }else if(this.head[0].offsetTop + this.head[0].offsetHeight > canvas.offsetHeight + 5){
             return true;
         }
         return false;
     }
 
     hide(){
-        this.head.style.display = 'none';
+        for(let i = 0; i<this.head.length; i++){
+            this.head[i].style.display = 'none';
+        }
     }
 
     ate(food){
-        if(this.head.offsetLeft < food.offsetLeft + food.offsetWidth && this.head.offsetLeft + this.head.offsetWidth > food.offsetLeft + this.head.offsetWidth/2 && this.head.offsetTop > food.offsetTop + this.head.offsetHeight/2 && this.head.offsetTop + this.head.offsetHeight < food.offsetTop + food.offsetHeight ){
+        if(this.head[0].offsetLeft < food.offsetLeft + food.offsetWidth && this.head[0].offsetLeft + this.head[0].offsetWidth > food.offsetLeft + this.head[0].offsetWidth/2 && this.head[0].offsetTop < food.offsetTop + this.head[0].offsetHeight/2 && this.head[0].offsetTop + this.head[0].offsetHeight >= food.offsetTop + food.offsetHeight ){
             return true;
         }
         return false;
     }
 
-    getBigger(){
-        //TODO
+    getBigger(where){
+        let tail;
+        tail = this.getPart(this.head[this.head.length-1].offsetLeft, this.head[this.head.length-1].offsetTop, where);
+        this.head.push(tail);
     }
+
+    hitTail(){
+        for(let i = 1; i<this.head.length; i++){
+            if(this.head[0].offsetLeft == this.head[i].offsetLeft && this.head[0].offsetTop == this.head[i].offsetTop){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

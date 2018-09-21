@@ -25,17 +25,23 @@
     let canvas;
     let head;
     let food ;
-    let score = 0;
+    let score = 0, Score;
 
     function createCanvas(){
         canvas = document.createElement('div');
         canvas.className = "canvas";
         document.body.appendChild(canvas);
+
+        Score = document.createElement('p');
+        document.body.appendChild(Score);
+        Score.innerHTML = 'Score = ' + score;
     }
 
     function createPlayer(){
         head = new Player();
-        canvas.appendChild(head.Elem);
+        for(let i = 0; i<head.length; i++){
+            canvas.appendChild(head.Elem[i]);
+        }
         move();
     }
 
@@ -56,13 +62,15 @@
             }); 
             head.move(where);
 
-            if(head.hitWall(canvas)){
+            if(head.hitWall(canvas) || head.hitTail()){
                 gameOver = true;
             }
             
             if(head.ate(food)){
                 score ++;
-                head.getBigger();
+                Score.innerHTML = 'Score = ' + score;
+                head.getBigger(where);
+                canvas.appendChild(head.Elem[head.length-1]);
                 createFood();
             }
 
@@ -71,20 +79,41 @@
                 head.hide();
                 alert('hit');
             }
-        }, 500, head);
+        }, 200, head);
     }
 
     function createFood(){
+        if(head.Elem.length == 40*40){
+            alert('won')
+            return;
+        }
         let x, y;
-        x = Math.floor(40 * (Math.random() * (canvas.offsetHeight - 45)/40));
-
-        y = Math.floor(40 * (Math.random() * (canvas.offsetWidth - 45)/40));
+        
+        let onSnake = true;
+        while (onSnake){
+            let Semaphore = true;
+            x = Math.floor( (Math.random() * (canvas.offsetWidth/40 - 1))) * 40 + 10;
+            y = Math.floor( (Math.random() * (canvas.offsetHeight/40 - 1))) * 40 + 10;
+            for(let i = 0; i<head.Elem.length; i++){
+                if(head.Elem[i].offsetTop == y && head.Elem[i].offsetLeft == x){
+                    Semaphore = false;
+                    break;
+                }
+            }    
+            if(Semaphore == true){
+                onSnake = false;
+            }
+        }
+        
+        
         if(typeof(food) == 'object'){
             food.setDisplay('none'); 
         }   
         food  = new Food(x, y);
         document.body.appendChild(food.Elem);
     }
+
+
 
     function main(){
         createCanvas();
