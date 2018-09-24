@@ -13,25 +13,13 @@ class Player{
     }
 
 
-    getPart(left, top, where){
+    getPart(left, top){
         let part = document.createElement('div');
         part.style.width = '40px';
         part.style.height = '40px';
         part.style.backgroundColor = 'black';
-        if(where == 'up'){
-            part.style.left = left + 'px';
-            part.style.top = top + 40 + 'px';
-        }else if(where == 'down'){
-            part.style.left = left + 'px';
-            part.style.top = top - 40 + 'px';
-        }else if(where == 'left'){
-            part.style.left = left - 40 + 'px';
-            part.style.top = top + 'px';
-        }else if(where == 'right'){
-            part.style.left = left + 40 + 'px';
-            part.style.top = top + 'px';
-        }
-
+        part.style.left = left + 'px';
+        part.style.top = top + 'px';
         part.style.position = 'absolute';
         return part;
     }
@@ -102,9 +90,12 @@ class Player{
     }
 
     hide(){
+        /*
         for(let i = 0; i<this.head.length; i++){
             this.head[i].style.display = 'none';
-        }
+        }*/
+        this.head[0].style.display = 'none';
+        
     }
 
     ate(food){
@@ -114,9 +105,9 @@ class Player{
         return false;
     }
 
-    getBigger(where){
+    getBigger(){
         let tail;
-        tail = this.getPart(this.head[this.head.length-1].offsetLeft, this.head[this.head.length-1].offsetTop, where);
+        tail = this.getPart(this.head[this.head.length-1].offsetLeft, this.head[this.head.length-1].offsetTop);
         this.head.push(tail);
     }
 

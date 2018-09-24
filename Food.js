@@ -1,5 +1,28 @@
 class Food{
-    constructor(x, y){
+    constructor(head, canvas){
+        let x, y;
+        
+        let onSnake = true;
+        while (onSnake){
+            let Semaphore = true;
+            x = Math.floor( (Math.random() * (canvas.offsetWidth/40 - 1))) * 40 + 10;
+            y = Math.floor( (Math.random() * (canvas.offsetHeight/40 - 1))) * 40 + 10;
+            for(let i = 0; i<head.Elem.length; i++){
+                if(head.Elem[i].offsetTop == y && head.Elem[i].offsetLeft == x){
+                    Semaphore = false;
+                    break;
+                }
+            }    
+            if(Semaphore == true){
+                onSnake = false;
+            }
+        }
+        
+        
+        if(typeof(food) == 'object'){
+            food.setDisplay('none'); 
+        } 
+        
         this.food = document.createElement('div');
         this.food.style.width = '40px';
         this.food.style.height = '40px';
@@ -8,6 +31,7 @@ class Food{
         this.food.style.position = 'absolute';
         this.food.style.left = x + 'px';
         this.food.style.top = y + 'px';
+
     }
 
     get Elem(){
@@ -34,4 +58,5 @@ class Food{
     setDisplay(item){
         this.food.style.display = item;
     }
+
 }
