@@ -3,30 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Snake</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="Player.js"></script>
     <script src="Food.js"></script>
     <script src="Canvas.js"></script>
+    <script src="AutoPlay.js"></script>
 </head>
 <body>
     
 </body>
-
-<style>
-.canvas{
-    background-color: bisque;
-    height: 805px;
-    width: 805px;
-}
-
-</style>
 
 <script>
     let canvas;
     let head;
     let food ;
     let score = 0, Score;
+    let NoWallsForSnake, AutoPlayCheckButton;
     //console.log(window.innerHeight, window.innerWidth);
 
     function createCanvas(){
@@ -36,6 +29,26 @@
         Score = document.createElement('p');
         document.body.appendChild(Score);
         Score.innerHTML = 'Score = ' + score;
+        Score.style.margin = '5px';
+        
+        NoWallsForSnake = document.createElement('input');
+        NoWallsForSnake.type = 'checkbox';
+        NoWallsForSnake.value = 'noWalls';
+        NoWallsForSnake.id = 'noWalls';
+        let descriptionNoWall = document.createElement('label');
+        descriptionNoWall.for = 'noWalls';
+        descriptionNoWall.innerHTML = 'Go through walls <br>  ';
+        document.body.appendChild(NoWallsForSnake);
+        document.body.appendChild(descriptionNoWall);
+
+        AutoPlayCheckButton = document.createElement('input');
+        AutoPlayCheckButton.type = 'checkbox';
+        AutoPlayCheckButton.id = 'autoPlay';
+        document.body.appendChild(AutoPlayCheckButton);
+        let descriptionAutoPlay = document.createElement('label');
+        descriptionAutoPlay.for = 'autoPlay';
+        descriptionAutoPlay.innerHTML = 'Autoplay (Beta) <br>  ';
+        document.body.appendChild(descriptionAutoPlay);
     }
 
     function createPlayer(){
@@ -61,12 +74,19 @@
                     where = 'down';
                 }
             }); 
-            head.move(where);
-
-            if(head.hitWall(canvas) || head.hitTail()){
-                gameOver = true;
+            if(AutoPlayCheckButton.checked == true){
+                let Autoplay = new AutoPlay();
+                where = Autoplay.direction(head.Elem[0], food);
             }
-            
+            head.move(where);
+            if(NoWallsForSnake.checked == true){
+                head.passWalls(canvas);
+                //head.hitTail() == true?gameOver = true:false; //more to do
+            }else{
+                if(head.hitWall(canvas) || head.hitTail()){
+                    gameOver = true;
+                }
+            }        
             if(head.ate(food)){
                 score ++;
                 Score.innerHTML = 'Score = ' + score;
@@ -78,13 +98,13 @@
             if(gameOver == true){
                 clearInterval(interval);
                 head.hide();
-                alert('hit');
+                alert('Game over! Final score is ' + score);
             }
         }, 200, head);
     }
 
     function createFood(){
-        if(head.Elem.length == canvas.offsetHeight/40 * canvas.offsetWidth/40){
+        if(head.Elem.length == ( canvas.offsetHeight ) / 40 * ( canvas.offsetWidth ) / 40 ){
             alert('won')
             return;
         }

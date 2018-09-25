@@ -79,11 +79,11 @@ class Player{
     hitWall(canvas){
         if(this.head[0].offsetLeft < canvas.offsetLeft){
             return true;
-        }else if(this.head[0].offsetLeft + this.head[0].offsetWidth > canvas.offsetWidth + 5){
+        }else if(this.head[0].offsetLeft + this.head[0].offsetWidth > canvas.offsetLeft + canvas.offsetWidth + 5){
             return true;
         }else if(this.head[0].offsetTop < canvas.offsetTop){
             return true;
-        }else if(this.head[0].offsetTop + this.head[0].offsetHeight > canvas.offsetHeight + 5){
+        }else if(this.head[0].offsetTop + this.head[0].offsetHeight > canvas.offsetTop + canvas.offsetHeight + 5){
             return true;
         }
         return false;
@@ -118,6 +118,19 @@ class Player{
             }
         }
         return false;
+    }
+
+    passWalls(canvas){
+        //console.log(this.head[0].offsetLeft, this.head[0].offsetTop);
+        if(this.head[0].offsetLeft < canvas.offsetLeft){
+            this.head[0].style.left = canvas.offsetLeft + canvas.offsetWidth - this.head[0].offsetWidth + 2 + 'px';
+        }else if(this.head[0].offsetTop < canvas.offsetTop){
+            this.head[0].style.top = canvas.offsetTop + canvas.offsetHeight - this.head[0].offsetHeight + 2 + 'px';
+        }else if(this.head[0].offsetLeft + this.head[0].offsetWidth > canvas.offsetLeft + canvas.offsetWidth + 5){
+            this.head[0].style.left = canvas.offsetLeft + 2 + 'px';
+        }else if(this.head[0].offsetTop + this.head[0].offsetHeight > canvas.offsetTop + canvas.offsetHeight + 5){
+            this.head[0].style.top = canvas.offsetTop + 2 + 'px';
+        }
     }
 
 }

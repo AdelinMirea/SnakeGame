@@ -15,7 +15,7 @@ class Canvas{
 
         this.canvas.style.height = height + 'px';
         this.canvas.style.width = width + 'px';
-        console.log(width, height);
+        
     }
 
     appendChild(elem){
@@ -27,11 +27,11 @@ class Canvas{
     }
 
     get offsetWidth(){
-        return this.canvas.offsetWidth;
+        return this.canvas.offsetWidth - 5;
     }
 
     get offsetHeight(){
-        return this.canvas.offsetHeight;
+        return this.canvas.offsetHeight - 5;
     }
 
     get offsetLeft(){
